@@ -4,6 +4,7 @@
  * Author:
  * Date:
  */
+#include <FastLED.h>
 
 // setup() runs once, when the device is first turned on.
 void setup() {

@@ -6,12 +6,14 @@
 #ifndef LPD8806_H
 #define LPD8806_H
 
-#if (ARDUINO >= 100)
-#include <Arduino.h>
-#else
-#include <WProgram.h>
-#include <pins_arduino.h> 
-#endif
+// #if (ARDUINO >= 100)
+// #include <Arduino.h>
+// #else
+// #include <WProgram.h>
+// #include <pins_arduino.h> 
+// #endif
+
+const int F_CPU = 1000000L;
 
 /**************************************************************************/
 /*!

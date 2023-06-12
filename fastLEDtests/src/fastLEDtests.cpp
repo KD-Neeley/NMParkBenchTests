@@ -10,11 +10,12 @@
  * Author:
  * Date:
  */
+#include <FastLED.h>
 
 // setup() runs once, when the device is first turned on.
 void setup();
 void loop();
-#line 9 "/Users/kdneeley/Documents/IoT/NMParkBenchTests/fastLEDtests/src/fastLEDtests.ino"
+#line 10 "/Users/kdneeley/Documents/IoT/NMParkBenchTests/fastLEDtests/src/fastLEDtests.ino"
 void setup() {
   // Put initialization like pinMode and begin functions here.
 
