@@ -6,6 +6,7 @@
 #ifndef LPD8806_H
 #define LPD8806_H
 
+#include <application.h>
 // #if (ARDUINO >= 100)
 // #include <Arduino.h>
 // #else
