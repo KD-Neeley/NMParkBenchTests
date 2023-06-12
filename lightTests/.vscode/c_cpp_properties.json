@@ -3,7 +3,9 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}", "lib/ArduinoCore-avr-master", "lib/LPD8806-1.0.5"
+                "${workspaceFolder}", 
+                "/Users/kdneeley/Documents/IoT/NMParkBenchTests/lightTests/lib/ArduinoCore-avr-master", 
+                "/Users/kdneeley/Documents/IoT/NMParkBenchTests/lightTests/lib/LPD8806-1.0.5"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -20,7 +22,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "lib/ArduinoCore-avr-master**",
-                "lib/LPD8806-master**"
+                "lib/LPD8806-1.0.5**"
             ],
             "defines": [],
             "macFrameworkPath": [

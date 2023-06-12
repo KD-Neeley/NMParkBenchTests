@@ -4,7 +4,8 @@
  * Author: KD Neeley
  * Date: 06/11/2023
  */
-#include "LPD8806.h"
+#include <LPD8806.h> 
+
 
 const int NLEDS = 160; // Number of LEDs
 const int CLKPIN = 14; //Clock In Pin
