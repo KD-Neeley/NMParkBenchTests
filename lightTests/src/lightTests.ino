@@ -21,9 +21,8 @@ void setup() {
 void loop() {
     for(int i=0; i<NLEDS; i++) {
         lights.setPixelColor(i, 255, 255, 255);
+        lights.show();
     }
-    
-    lights.show();
 }
 
 

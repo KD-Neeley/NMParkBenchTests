@@ -4,5 +4,8 @@
     "files.associations": {
         "*.ino": "cpp"
     },
-    "particle.targetDevice": "Ada_2"
+    "particle.targetDevice": "Ada_2",
+    "particle.firmwareVersion": "4.0.1",
+    "particle.targetPlatform": "boron",
+    "C_Cpp.default.compilerPath": "/usr/bin/clang"
 }
