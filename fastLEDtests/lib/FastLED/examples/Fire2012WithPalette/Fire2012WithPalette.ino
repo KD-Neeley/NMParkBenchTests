@@ -1,5 +1,8 @@
-#include "FastLED.h"
-FASTLED_USING_NAMESPACE;
+/// @file    Fire2012WithPalette.ino
+/// @brief   Simple one-dimensional fire animation with a programmable color palette
+/// @example Fire2012WithPalette.ino
+
+#include <FastLED.h>
 
 #define LED_PIN     5
 #define COLOR_ORDER GRB
@@ -8,6 +11,8 @@ FASTLED_USING_NAMESPACE;
 
 #define BRIGHTNESS  200
 #define FRAMES_PER_SECOND 60
+
+bool gReverseDirection = false;
 
 CRGB leds[NUM_LEDS];
 
@@ -127,7 +132,7 @@ void loop()
 void Fire2012WithPalette()
 {
 // Array of temperature readings at each simulation cell
-  static byte heat[NUM_LEDS];
+  static uint8_t heat[NUM_LEDS];
 
   // Step 1.  Cool down every cell a little
     for( int i = 0; i < NUM_LEDS; i++) {
@@ -149,8 +154,15 @@ void Fire2012WithPalette()
     for( int j = 0; j < NUM_LEDS; j++) {
       // Scale the heat value from 0-255 down to 0-240
       // for best results with color palettes.
-      byte colorindex = scale8( heat[j], 240);
-      leds[j] = ColorFromPalette( gPal, colorindex);
+      uint8_t colorindex = scale8( heat[j], 240);
+      CRGB color = ColorFromPalette( gPal, colorindex);
+      int pixelnumber;
+      if( gReverseDirection ) {
+        pixelnumber = (NUM_LEDS-1) - j;
+      } else {
+        pixelnumber = j;
+      }
+      leds[pixelnumber] = color;
     }
 }
 

@@ -1,5 +1,8 @@
-#include "FastLED.h"
-FASTLED_USING_NAMESPACE;
+/// @file    AnalogOutput.ino
+/// @brief   Demonstrates how to use FastLED color functions even without a "pixel-addressible" smart LED strip.
+/// @example AnalogOutput.ino
+
+#include <FastLED.h>
 
 // Example showing how to use FastLED color functions
 // even when you're NOT using a "pixel-addressible" smart LED strip.

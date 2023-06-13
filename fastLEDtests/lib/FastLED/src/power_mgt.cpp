@@ -1,31 +1,37 @@
+/// @file power_mgt.cpp
+/// Functions to limit the power used by FastLED
+
+/// Disables pragma messages and warnings
 #define FASTLED_INTERNAL
 #include "FastLED.h"
 #include "power_mgt.h"
 
 FASTLED_NAMESPACE_BEGIN
 
-//// POWER MANAGEMENT
+// POWER MANAGEMENT
 
-// These power usage values are approximate, and your exact readings
-// will be slightly (10%?) different from these.
-//
-// They were arrived at by actually measuing the power draw of a number
-// of different LED strips, and a bunch of closed-loop-feedback testing
-// to make sure that if we USE these values, we stay at or under
-// the target power consumption.
-// Actual power consumption is much, much more complicated and has
-// to include things like voltage drop, etc., etc.
-// However, this is good enough for most cases, and almost certainly better
-// than no power management at all.
-//
-// You're welcome to adjust these values as needed; there may eventually be an API
-// for changing these on the fly, but it saves codespace and RAM to have them
-// be compile-time constants.
-
-static const uint8_t gRed_mW   = 16 * 5; // 16mA @ 5v = 80mW
-static const uint8_t gGreen_mW = 11 * 5; // 11mA @ 5v = 55mW
-static const uint8_t gBlue_mW  = 15 * 5; // 15mA @ 5v = 75mW
-static const uint8_t gDark_mW  =  1 * 5; //  1mA @ 5v =  5mW
+/// @name Power Usage Values
+/// These power usage values are approximate, and your exact readings
+/// will be slightly (10%?) different from these.
+///
+/// They were arrived at by actually measuing the power draw of a number
+/// of different LED strips, and a bunch of closed-loop-feedback testing
+/// to make sure that if we USE these values, we stay at or under
+/// the target power consumption.
+/// Actual power consumption is much, much more complicated and has
+/// to include things like voltage drop, etc., etc.
+/// However, this is good enough for most cases, and almost certainly better
+/// than no power management at all.
+///
+/// You're welcome to adjust these values as needed; there may eventually be an API
+/// for changing these on the fly, but it saves codespace and RAM to have them
+/// be compile-time constants.
+/// @{
+static const uint8_t gRed_mW   = 16 * 5; ///< 16mA @ 5v = 80mW
+static const uint8_t gGreen_mW = 11 * 5; ///< 11mA @ 5v = 55mW
+static const uint8_t gBlue_mW  = 15 * 5; ///< 15mA @ 5v = 75mW
+static const uint8_t gDark_mW  =  1 * 5; ///<  1mA @ 5v =  5mW
+/// @}
 
 // Alternate calibration by RAtkins via pre-PSU wattage measurments;
 // these are all probably about 20%-25% too high due to PSU heat losses,
@@ -37,15 +43,17 @@ static const uint8_t gDark_mW  =  1 * 5; //  1mA @ 5v =  5mW
 //  static const uint8_t gDark_mW  =  12;
 
 
+/// Debug Option: Set to 1 to enable the power limiting LED
+/// @see set_max_power_indicator_LED()
 #define POWER_LED 1
+
+/// Debug Option: Set to enable Serial debug statements for power limit functions
 #define POWER_DEBUG_PRINT 0
 
 
 // Power consumed by the MCU
 static const uint8_t gMCU_mW  =  25 * 5; // 25mA @ 5v = 125 mW
 
-
-static uint32_t gMaxPowerInMilliwatts = (uint32_t)(400) * (uint32_t)(5); // 400mA @ 5v default to avoid USB bricking
 static uint8_t  gMaxPowerIndicatorLEDPinNumber = 0; // default = Arduino onboard LED pin.  set to zero to skip this.
 
 
@@ -62,7 +70,7 @@ uint32_t calculate_unscaled_power_mW( const CRGB* ledbuffer, uint16_t numLeds ) 
         red32   += *p++;
         green32 += *p++;
         blue32  += *p++;
-        count--;
+        --count;
     }
 
     red32   *= gRed_mW;
@@ -79,6 +87,22 @@ uint32_t calculate_unscaled_power_mW( const CRGB* ledbuffer, uint16_t numLeds ) 
 }
 
 
+uint8_t calculate_max_brightness_for_power_vmA(const CRGB* ledbuffer, uint16_t numLeds, uint8_t target_brightness, uint32_t max_power_V, uint32_t max_power_mA) {
+	return calculate_max_brightness_for_power_mW(ledbuffer, numLeds, target_brightness, max_power_V * max_power_mA);
+}
+
+uint8_t calculate_max_brightness_for_power_mW(const CRGB* ledbuffer, uint16_t numLeds, uint8_t target_brightness, uint32_t max_power_mW) {
+ 	uint32_t total_mW = calculate_unscaled_power_mW( ledbuffer, numLeds);
+
+	uint32_t requested_power_mW = ((uint32_t)total_mW * target_brightness) / 256;
+
+	uint8_t recommended_brightness = target_brightness;
+	if(requested_power_mW > max_power_mW) { 
+        recommended_brightness = (uint32_t)((uint8_t)(target_brightness) * (uint32_t)(max_power_mW)) / ((uint32_t)(requested_power_mW));
+	}
+
+	return recommended_brightness;
+}
 
 // sets brightness to
 //  - no more than target_brightness
@@ -111,7 +135,7 @@ uint8_t calculate_max_brightness_for_power_mW( uint8_t target_brightness, uint32
     if( requested_power_mW < max_power_mW) {
 #if POWER_LED > 0
         if( gMaxPowerIndicatorLEDPinNumber ) {
-            digitalWrite(gMaxPowerIndicatorLEDPinNumber, LOW);   // turn the LED off
+            Pin(gMaxPowerIndicatorLEDPinNumber).lo(); // turn the LED off
         }
 #endif
 #if POWER_DEBUG_PRINT == 1
@@ -134,7 +158,7 @@ uint8_t calculate_max_brightness_for_power_mW( uint8_t target_brightness, uint32
 
 #if POWER_LED > 0
     if( gMaxPowerIndicatorLEDPinNumber ) {
-        digitalWrite( gMaxPowerIndicatorLEDPinNumber, HIGH);   // turn the LED on
+        Pin(gMaxPowerIndicatorLEDPinNumber).hi(); // turn the LED on
     }
 #endif
 
@@ -149,32 +173,23 @@ void set_max_power_indicator_LED( uint8_t pinNumber)
 
 void set_max_power_in_volts_and_milliamps( uint8_t volts, uint32_t milliamps)
 {
-    gMaxPowerInMilliwatts = (uint32_t)((uint32_t)(volts) * milliamps);
+    FastLED.setMaxPowerInVoltsAndMilliamps(volts, milliamps);
 }
 
 void set_max_power_in_milliwatts( uint32_t powerInmW)
 {
-    gMaxPowerInMilliwatts = powerInmW;
+    FastLED.setMaxPowerInMilliWatts(powerInmW);
 }
 
 void show_at_max_brightness_for_power()
 {
-    uint8_t targetBrightness = FastLED.getBrightness();
-    uint8_t max = calculate_max_brightness_for_power_mW( targetBrightness, gMaxPowerInMilliwatts);
-
-    FastLED.setBrightness( max );
+    // power management usage is now in FastLED.show, no need for this function
     FastLED.show();
-    FastLED.setBrightness( targetBrightness );
 }
 
 void delay_at_max_brightness_for_power( uint16_t ms)
 {
-    uint8_t targetBrightness = FastLED.getBrightness();
-    uint8_t max = calculate_max_brightness_for_power_mW( targetBrightness, gMaxPowerInMilliwatts);
-
-    FastLED.setBrightness( max );
-    FastLED.delay( ms);
-    FastLED.setBrightness( targetBrightness );
+    FastLED.delay(ms);
 }
 
 FASTLED_NAMESPACE_END

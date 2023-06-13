@@ -1,6 +1,10 @@
 #define FASTLED_INTERNAL
 #include "FastLED.h"
 
+/// @file wiring.cpp
+/// Re-implementation of Arduino core functions
+/// @deprecated No longer used
+
 FASTLED_USING_NAMESPACE
 
 #if 0
@@ -71,10 +75,10 @@ unsigned long micros() {
 
 #ifdef TIFR0
         if ((TIFR0 & _BV(TOV0)) && (t < 255))
-                m++;
+                ++m;
 #else
         if ((TIFR & _BV(TOV0)) && (t < 255))
-                m++;
+                ++m;
 #endif
 
         SREG = oldSREG;
@@ -88,7 +92,7 @@ void delay(unsigned long ms)
 
         while (ms > 0) {
                 if (((uint16_t)micros() - start) >= 1000) {
-                        ms--;
+                        --ms;
                         start += 1000;
                 }
         }

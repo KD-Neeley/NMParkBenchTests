@@ -1,9 +1,16 @@
+/// @file lib8tion.cpp
+/// Fast, efficient 8-bit math functions specifically
+/// designed for high-performance LED programming. 
+
+/// Disables pragma messages and warnings
 #define FASTLED_INTERNAL
+
 #include <stdint.h>
 #include "FastLED.h"
 
 FASTLED_NAMESPACE_BEGIN
 
+/// @copydoc ::rand16seed
 #define RAND16_SEED  1337
 uint16_t rand16seed = RAND16_SEED;
 
@@ -56,7 +63,7 @@ void * memset8 ( void * ptr, uint8_t val, uint16_t num )
 
 
 //__attribute__ ((noinline))
-void * memcpy8 ( void * dst, void* src, uint16_t num )
+void * memcpy8 ( void * dst, const void* src, uint16_t num )
 {
     asm volatile(
          "  movw r30, %[src]        \n\t"
@@ -84,7 +91,7 @@ void * memcpy8 ( void * dst, void* src, uint16_t num )
 }
 
 //__attribute__ ((noinline))
-void * memmove8 ( void * dst, void* src, uint16_t num )
+void * memmove8 ( void * dst, const void* src, uint16_t num )
 {
     if( src > dst) {
         // if src > dst then we can use the forward-stepping memcpy8
@@ -142,7 +149,7 @@ void test1abs( int8_t i)
 void testabs()
 {
     delay(5000);
-    for( int8_t q = -128; q != 127; q++) {
+    for( int8_t q = -128; q != 127; ++q) {
         test1abs(q);
     }
     for(;;){};
@@ -225,7 +232,7 @@ void testnscale8x3()
 {
     delay(5000);
     byte r, g, b, sc;
-    for( byte z = 0; z < 10; z++) {
+    for( byte z = 0; z < 10; ++z) {
         r = random8(); g = random8(); b = random8(); sc = random8();
 
         Serial.print("nscale8x3_video( ");
