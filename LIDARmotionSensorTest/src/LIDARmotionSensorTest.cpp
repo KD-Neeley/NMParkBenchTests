@@ -16,20 +16,35 @@ void setup();
 void loop();
 #line 9 "/Users/kdneeley/Documents/IoT/NMParkBenchTests/LIDARmotionSensorTest/src/LIDARmotionSensorTest.ino"
 const int I2CADDRESS = 0X62;
+const int TRIGGER = A0;
+const int MONITOR = A1;
 
-byte * arrayToSave[8];
+
+
+byte * arrayToSaveReading[8] = {}; //how do I write to 0x00? double check array syntax
+
+
+
 LIDARLite_v4LED L1;
+
 
 
 void setup() {
     Serial.begin(9600);
-    L1.takeRange(I2CADDRESS);
+   
 }
 
 void loop() {
+
     int dist;
-    L1.waitForBusy(I2CADDRESS);
-    dist = L1.readDistance(I2CADDRESS);
+  
+    L1.write(0x04, *arrayToSaveReading, 8, I2CADDRESS);
+
+    //repeat the following until bit 0 is low
+    L1.read(0x01, *arrayToSaveReading,8, I2CADDRESS);
+    
+    L1.read(0x10, *arrayToSaveReading, 8, I2CADDRESS);
+    L1.read(0x11, *arrayToSaveReading, 8, I2CADDRESS);
     Serial.printf("Distance Measured = %i\n", dist);
 
 }
