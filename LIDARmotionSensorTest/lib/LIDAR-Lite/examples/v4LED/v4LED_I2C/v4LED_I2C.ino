@@ -30,6 +30,7 @@
 #include <Wire.h>
 #include "LIDARLite_v4LED.h"
 
+ uint16_t distance;
 LIDARLite_v4LED myLidarLite;
 
 #define FAST_I2C
