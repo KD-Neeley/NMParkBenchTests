@@ -7,8 +7,8 @@
 #include <LIDARLite_v4LED.h>
 
 const int I2CADDRESS = 0X62;
-const int TRIGGER = A0;
-const int MONITOR = A1;
+// const int TRIGGER = A0;
+// const int MONITOR = A1;
 
 
 
