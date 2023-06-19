@@ -38,7 +38,7 @@ int band1, band2, band3, band4, band5, band6, band7;
 
 
 //PINS and Constants for the Lights
-const int NLEDS = 160; // Number of LEDs
+const int NLEDS = 324; // Number of LEDs
 const int CLKPIN = 14; //Clock In Pin
 const int DPIN = 15; //Data In Pin
 const int MULTIPLE = 4;
