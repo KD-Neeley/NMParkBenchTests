@@ -18,7 +18,7 @@
 void setup();
 void loop();
 #line 12 "/Users/kdneeley/Documents/IoT/NMParkBenchTests/lightTests/src/lightTests.ino"
-const int NLEDS = 160; // Number of LEDs
+const int NLEDS = 162; // Number of LEDs
 const int CLKPIN = 14; //Clock In Pin
 const int DPIN = 15; //Data In Pin
 const int MULTIPLE = 4;
@@ -69,8 +69,8 @@ void loop() {
     //the following code cycles all the pixels through the specified color array at the time interval in the delay
     for(int i = 0; i<NLEDS; i++) {
         int numColors = 9;
-        for(int cycle=0; cycle<=numColors; cycle++) {
-            pixelFill(0, NLEDS, traditionalrainbow[cycle]);
+        for(int iterate=0; iterate<=numColors; iterate++) {
+            pixelFill(0, NLEDS, traditionalrainbow[iterate]);
             lights.show();
             delay(500);
         }
@@ -80,8 +80,8 @@ void loop() {
 
          for(int i = 0; i<NLEDS; i++) {
         int numColors = 3;
-        for(int cycle=0; cycle<=numColors; cycle++) {
-            pixelFill(0, NLEDS, primaries[cycle]);
+        for(int iterate=0; iterate<=numColors; iterate++) {
+            pixelFill(0, NLEDS, primaries[iterate]);
             lights.show();
             delay(500);
         }

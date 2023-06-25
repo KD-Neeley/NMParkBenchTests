@@ -127,7 +127,7 @@ void loop() {
   }
   if(displayLight == band7) {
   //white
-   pixelFill(0, NLEDS-1, full);
+   pixelFill(0, NLEDS-1, fullgreen);
   }
 }
 

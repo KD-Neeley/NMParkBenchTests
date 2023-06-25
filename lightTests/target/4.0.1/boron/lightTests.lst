@@ -35,9 +35,9 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  15 .debug_line   00036cb5  00000000  00000000  00196fc8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_str    001313cf  00000000  00000000  001cdc7d  2**0
+ 16 .debug_str    001313d2  00000000  00000000  001cdc7d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_frame  00006964  00000000  00000000  002ff04c  2**2
+ 17 .debug_frame  00006964  00000000  00000000  002ff050  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -429,24 +429,24 @@ void loop() {
    b4238:	d1dc      	bne.n	b41f4 <loop+0xc>
             lights.show();
    b423a:	4f26      	ldr	r7, [pc, #152]	; (b42d4 <loop+0xec>)
-   b423c:	24a0      	movs	r4, #160	; 0xa0
-        for(int cycle=0; cycle<=numColors; cycle++) {
+   b423c:	24a2      	movs	r4, #162	; 0xa2
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b423e:	4e26      	ldr	r6, [pc, #152]	; (b42d8 <loop+0xf0>)
    b4240:	2500      	movs	r5, #0
-            pixelFill(0, NLEDS, traditionalrainbow[cycle]);
+            pixelFill(0, NLEDS, traditionalrainbow[iterate]);
    b4242:	f856 2b04 	ldr.w	r2, [r6], #4
-   b4246:	21a0      	movs	r1, #160	; 0xa0
+   b4246:	21a2      	movs	r1, #162	; 0xa2
    b4248:	2000      	movs	r0, #0
    b424a:	f7ff ff3b 	bl	b40c4 <_Z9pixelFilliii>
             lights.show();
    b424e:	4638      	mov	r0, r7
    b4250:	f000 f8e0 	bl	b4414 <_ZN7LPD88064showEv>
-        for(int cycle=0; cycle<=numColors; cycle++) {
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b4254:	3501      	adds	r5, #1
             delay(500);
    b4256:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
    b425a:	f000 fb71 	bl	b4940 <delay>
-        for(int cycle=0; cycle<=numColors; cycle++) {
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b425e:	2d0a      	cmp	r5, #10
    b4260:	d1ef      	bne.n	b4242 <loop+0x5a>
     for(int i = 0; i<NLEDS; i++) {
@@ -455,24 +455,24 @@ void loop() {
    b4266:	f8df 8074 	ldr.w	r8, [pc, #116]	; b42dc <loop+0xf4>
             lights.show();
    b426a:	4f1a      	ldr	r7, [pc, #104]	; (b42d4 <loop+0xec>)
-   b426c:	24a0      	movs	r4, #160	; 0xa0
-        for(int cycle=0; cycle<=numColors; cycle++) {
+   b426c:	24a2      	movs	r4, #162	; 0xa2
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b426e:	4e1b      	ldr	r6, [pc, #108]	; (b42dc <loop+0xf4>)
    b4270:	2500      	movs	r5, #0
-            pixelFill(0, NLEDS, primaries[cycle]);
+            pixelFill(0, NLEDS, primaries[iterate]);
    b4272:	f856 2b04 	ldr.w	r2, [r6], #4
-   b4276:	21a0      	movs	r1, #160	; 0xa0
+   b4276:	21a2      	movs	r1, #162	; 0xa2
    b4278:	2000      	movs	r0, #0
    b427a:	f7ff ff23 	bl	b40c4 <_Z9pixelFilliii>
             lights.show();
    b427e:	4638      	mov	r0, r7
    b4280:	f000 f8c8 	bl	b4414 <_ZN7LPD88064showEv>
-        for(int cycle=0; cycle<=numColors; cycle++) {
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b4284:	3501      	adds	r5, #1
             delay(500);
    b4286:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
    b428a:	f000 fb59 	bl	b4940 <delay>
-        for(int cycle=0; cycle<=numColors; cycle++) {
+        for(int iterate=0; iterate<=numColors; iterate++) {
    b428e:	2d04      	cmp	r5, #4
    b4290:	d1ef      	bne.n	b4272 <loop+0x8a>
          for(int i = 0; i<NLEDS; i++) {
@@ -500,7 +500,7 @@ void loop() {
    b42b6:	d1f3      	bne.n	b42a0 <loop+0xb8>
     for(int i =0; i<NLEDS; i++) {
    b42b8:	3405      	adds	r4, #5
-   b42ba:	2ca0      	cmp	r4, #160	; 0xa0
+   b42ba:	2ca5      	cmp	r4, #165	; 0xa5
    b42bc:	d1ec      	bne.n	b4298 <loop+0xb0>
 }
    b42be:	e8bd 83f8 	ldmia.w	sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
@@ -524,7 +524,7 @@ LPD8806 lights = LPD8806(NLEDS, CLKPIN, DPIN);
    b42e0:	4802      	ldr	r0, [pc, #8]	; (b42ec <_GLOBAL__sub_I_numArray+0xc>)
    b42e2:	230f      	movs	r3, #15
    b42e4:	220e      	movs	r2, #14
-   b42e6:	21a0      	movs	r1, #160	; 0xa0
+   b42e6:	21a2      	movs	r1, #162	; 0xa2
    b42e8:	f000 b8f3 	b.w	b44d2 <_ZN7LPD8806C1Ethh>
    b42ec:	2003e680 	.word	0x2003e680
 
